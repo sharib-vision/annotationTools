@@ -15,6 +15,18 @@ usage: python json2yolo.py -jsonFileName /Users/shariba/development/miscFunction
 output: saves txtfile with class and bbox in yolo format and a json file
 
 '''
+
+def draw_caption(image, boxes):
+#testing explicit
+    import random as rnd
+    import cv2
+    value = [rnd.randint(0, 255), rnd.randint(0, 255), rnd.randint(0, 255)]
+    
+    cv2.putText(image, boxes[0], (boxes[1], boxes[2] - 10), cv2.FONT_HERSHEY_PLAIN, 1, value, 1)
+    cv2.rectangle(image, (boxes[1], boxes[2]), (boxes[3], boxes[4]), color=value, thickness=2)
+    return image
+    
+    
 def read_json_file(jsonFile):
     import json
     import objectpath
@@ -38,7 +50,7 @@ def read_json_file(jsonFile):
                 bbox.append(result_tuple_from)
                 bbox.append(result_tuple_to)
 
-    return category, bbox
+    return category, bbox, data
 
 def read_json_file_admin(jsonFile):
     import json
@@ -69,6 +81,8 @@ def read_json_file_admin(jsonFile):
     return category, bbox, frameName, data
 
 useParsing=0
+debug = 0
+writeImagewithBox=1
 annotator=['adam', 'barbara']
 
 if __name__=="__main__":
@@ -80,8 +94,6 @@ if __name__=="__main__":
     from collections import Counter
 #    import pandas as pd
     
-    debug = 0
-
     artefactsList=[]
  
     file = ''
@@ -114,8 +126,14 @@ if __name__=="__main__":
     else:
 #        jsonFile='AIDA_annotation-2.json'//data can be deprecated
         jsonFile='annotation_test_admin.json'
-        category,  bbox, frameName, data = read_json_file_admin(jsonFile)
+        jsonFile='AIDA_annotation-adam_2233.json'
+#        category,  bbox, frameName, data = read_json_file_admin(jsonFile)
+        category,  bbox, data = read_json_file(jsonFile)
+        
+        frameName='Frame_00002233'
         file = frameName+'_adam.txt'
+        
+        
         jsonFileRenamed=frameName+'_'+annotator[0]+'.json'
         fileObj= open(jsonFileRenamed, "w")
         json.dump(data, fileObj)
@@ -161,7 +179,18 @@ if __name__=="__main__":
     [3] Write to image_no.txt with [0...7][bbox]
     
     """
-   
+    import cv2
+    
+    '''
+    print the annotation box on the images
+    
+    '''
+    
+    annotationImage='../annotation_image/'+frameName+'.jpg'
+    img = cv2.imread(annotationImage, 1)
+    print(img.shape)
+    
+    
     try:
         os.remove(file)
     except OSError:
@@ -169,15 +198,58 @@ if __name__=="__main__":
     
     textfile = open(file, 'a')
     cnt = 0
+    annot_bboxes=[]
+
     
     for i in range (len(category)):
+#        if debug:
+        
+        x1=int(float(artefactsList[cnt+1][0]))
+        y1=int(float(artefactsList[cnt+1][1]))
+        
+        x2=int(float(artefactsList[cnt+2][0]))
+        y2=int(float(artefactsList[cnt+2][1])) 
+        
+#        debug: cv2.rectangle(img, (x1, y1), (x2, y2), color=value, thickness=2)
+        
+#        img=draw_caption(img, annot_bboxes)
+        
+            
+        '''
+        print the annotation box on the images
+        
+        '''
+        
+        print("{},{},{},{}".format(x1,y1,x2,y2))
+        
+        annot_bboxes.append([artefactsList[cnt], x1, y1, x2, y2 ])
+        img=draw_caption(img, annot_bboxes[i])
+        
         if debug:
-            print(artefactsList[cnt])
-            print(artefactsList[cnt+1])
-            print(artefactsList[cnt+2])
+            cv2.imshow("", img)
+            cv2.waitKey(0)
+    
+        '''
+        save as txt file the annotation box on the images
+        
+        '''
         
         textfile.write(artefactsList[cnt]+ ' '+ str(float(artefactsList[cnt+1][0]))+ ' '+str(float(artefactsList[cnt+1][1]))+' '+ str(float(artefactsList[cnt+2][0]))+ ' '+ str(float(artefactsList[cnt+2][1])))
         textfile.write('\n')
         cnt = cnt+3
+    '''
+    write image with the bbox from AIDA rect-box annotations
     
+    '''
+        
+    if writeImagewithBox:
+        cv2.imwrite(frameName+'.jpg',img)
     textfile.close()
+    
+    
+   
+    
+    
+    
+    
+    
