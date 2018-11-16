@@ -1,0 +1,172 @@
+{
+  "name": "An AIDA project",
+  "layers": [
+    {
+      "name": "Specularity",
+      "opacity": 1,
+      "items": []
+    },
+    {
+      "name": "Saturation",
+      "opacity": 1,
+      "items": [
+        {
+          "class": "",
+          "type": "rectangle",
+          "color": {
+            "fill": {
+              "hue": 60,
+              "saturation": 1,
+              "lightness": 0.85,
+              "alpha": 0.7
+            },
+            "stroke": {
+              "hue": 60,
+              "saturation": 1,
+              "lightness": 0.85,
+              "alpha": 1
+            }
+          },
+          "from": {
+            "x": 428.79397902233933,
+            "y": 198.17389612915778
+          },
+          "to": {
+            "x": 508.1765594840873,
+            "y": 428.79397902233933
+          }
+        },
+        {
+          "class": "",
+          "type": "rectangle",
+          "color": {
+            "fill": {
+              "hue": 60,
+              "saturation": 1,
+              "lightness": 0.85,
+              "alpha": 0.7
+            },
+            "stroke": {
+              "hue": 60,
+              "saturation": 1,
+              "lightness": 0.85,
+              "alpha": 1
+            }
+          },
+          "from": {
+            "x": 404.15800577558997,
+            "y": 422.63498571065196
+          },
+          "to": {
+            "x": 492.4369099097751,
+            "y": 507.49222689389984
+          }
+        }
+      ]
+    },
+    {
+      "name": "Artefact",
+      "opacity": 1,
+      "items": [
+        {
+          "class": "",
+          "type": "rectangle",
+          "color": {
+            "fill": {
+              "hue": 248,
+              "saturation": 0.3,
+              "lightness": 0.79,
+              "alpha": 0.7
+            },
+            "stroke": {
+              "hue": 248,
+              "saturation": 0.3,
+              "lightness": 0.79,
+              "alpha": 1
+            }
+          },
+          "from": {
+            "x": 9.982433827600136,
+            "y": 51.04238923884909
+          },
+          "to": {
+            "x": 501.3332335822125,
+            "y": 187.90890727634556
+          }
+        },
+        {
+          "class": "",
+          "type": "rectangle",
+          "color": {
+            "fill": {
+              "hue": 248,
+              "saturation": 0.3,
+              "lightness": 0.79,
+              "alpha": 0.7
+            },
+            "stroke": {
+              "hue": 248,
+              "saturation": 0.3,
+              "lightness": 0.79,
+              "alpha": 1
+            }
+          },
+          "from": {
+            "x": 253.6048359343438,
+            "y": 194.75223317822037
+          },
+          "to": {
+            "x": 395.2616821031527,
+            "y": 416.4759923989646
+          }
+        },
+        {
+          "class": "",
+          "type": "rectangle",
+          "color": {
+            "fill": {
+              "hue": 248,
+              "saturation": 0.3,
+              "lightness": 0.79,
+              "alpha": 0.7
+            },
+            "stroke": {
+              "hue": 248,
+              "saturation": 0.3,
+              "lightness": 0.79,
+              "alpha": 1
+            }
+          },
+          "from": {
+            "x": 407.57966872652736,
+            "y": 1.0861101551628753
+          },
+          "to": {
+            "x": 476.0129277452756,
+            "y": 49.673724058474114
+          }
+        }
+      ]
+    },
+    {
+      "name": "Blur",
+      "opacity": 1,
+      "items": []
+    },
+    {
+      "name": "Bubbles",
+      "opacity": 1,
+      "items": []
+    },
+    {
+      "name": "Contrast",
+      "opacity": 1,
+      "items": []
+    },
+    {
+      "name": "Instrument",
+      "opacity": 1,
+      "items": []
+    }
+  ]
+}
