@@ -120,7 +120,7 @@ def saveAnnotationMasksPerClass(img, xval_artefact, yval_artefact, category, mas
     maskImage=np.zeros((height,width,ch), np.uint8)
     colorArray = ['red', 'green', 'magenta', 'cyan', 'blue', '']
     dpi = 80
-    cnt = 0
+    cnt = 1
     figsize = width / float(dpi), height / float(dpi)
     maskImageFileName_class = maskImageFileName.split('.')[0]
     for i in range (len(xval_artefact)):
@@ -133,10 +133,10 @@ def saveAnnotationMasksPerClass(img, xval_artefact, yval_artefact, category, mas
 #        plt.plot(xval_artefact[i][:],yval_artefact[i][:], linewidth=5,color=colorArray[i])
         plt.fill(xval_artefact[i][:],yval_artefact[i][:], linewidth=5,color=colorArray[i])
         if  category[i-1] == category[i]:
-            maskImageFileName = maskImageFileName_class+'_'+category[i]+str(cnt)+'.png'
+            maskImageFileName = maskImageFileName_class+'_'+category[i]+'_'+str(cnt)+'.png'
             cnt=cnt+1
         else:
-            maskImageFileName = maskImageFileName_class+'_'+category[i]+'.png'
+            maskImageFileName = maskImageFileName_class+'_'+category[i]+'_0.png'
         fig.savefig(maskImageFileName, dpi=dpi, transparent=True)
 
 #    plt.show() 
@@ -148,7 +148,6 @@ annotator=['adam', 'barbara']
 
 if __name__=="__main__":
 
-    import json
     import re
     import argparse
     
@@ -178,9 +177,9 @@ if __name__=="__main__":
         
         frameName=imageFile.split('.')[0]
         
-        fileObj= open(jsonFileRenamed, "w")
-        json.dump(data, fileObj)
-        fileObj.close()
+#        fileObj= open(jsonFileRenamed, "w")
+#        json.dump(data, fileObj)
+#        fileObj.close()
 #        also save the json file with annotator name and corresponding file name
         
         
