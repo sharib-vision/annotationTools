@@ -1,11 +1,11 @@
 # annotationTools
 
 
-[1] Convertion of bounding boxes in AIDA (Json) to txt file (yolo format but unnormalized)
+[1] Convertion of ``bounding boxes for detection`` of AIDA (Json) to txt file (yolo format but unnormalized)
 
     use json2yolo.py
 
-[2] Convertion of semantic segmentation of AIDA (Json) to maskImage (# of masked images = # of class labels)
+[2] Convertion of ``semantic segmentation`` of AIDA (Json) to maskImage (# of masked images = # of class labels)
 
     use json2maskImage.py
 
