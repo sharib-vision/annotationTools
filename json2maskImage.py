@@ -120,23 +120,36 @@ def saveAnnotationMasksPerClass(img, xval_artefact, yval_artefact, category, mas
     maskImage=np.zeros((height,width,ch), np.uint8)
     colorArray = ['red', 'green', 'magenta', 'cyan', 'blue', '']
     dpi = 80
-    cnt = 1
     figsize = width / float(dpi), height / float(dpi)
     maskImageFileName_class = maskImageFileName.split('.')[0]
-    for i in range (len(xval_artefact)):
+    unique_entries = set(category)
+#    convert set to list 
+#    list_uniqueClasses = list(unique_entries)
+    
+    indices = { value : [ i for i, v in enumerate(category) if v == value ] for value in unique_entries }
+    arrayList_cat= []
+    for k in range (len(unique_entries)):
+        arrayList_cat.append(len(indices[category[k]]))
+    
+#    print(arrayList_cat)
+    
+    for i in range (len(unique_entries)):
         fig = plt.figure(figsize=figsize)
         ax = fig.add_axes([0, 0, 1, 1])
         ax.axis('off')
         ax.imshow(maskImage, interpolation='nearest')
         ax.axis('image')
         ax.set(xlim=[0, width], ylim=[height, 0], aspect=1)
-#        plt.plot(xval_artefact[i][:],yval_artefact[i][:], linewidth=5,color=colorArray[i])
-        plt.fill(xval_artefact[i][:],yval_artefact[i][:], linewidth=5,color=colorArray[i])
-        if  category[i-1] == category[i]:
-            maskImageFileName = maskImageFileName_class+'_'+category[i]+'_'+str(cnt)+'.png'
-            cnt=cnt+1
-        else:
-            maskImageFileName = maskImageFileName_class+'_'+category[i]+'_0.png'
+        j = 0
+        plt_before = plt.fill(0,0, linewidth=5,color=colorArray[i])
+#        combine masks belonging to same class
+        while j < arrayList_cat[i]:
+    #        plt.plot(xval_artefact[i][:],yval_artefact[i][:], linewidth=5,color=colorArray[i])
+            plt_before=plt_before+plt.fill(xval_artefact[i+j][:],yval_artefact[i+j][:], linewidth=5,color=colorArray[i])
+            j += 1
+        
+
+        maskImageFileName = maskImageFileName_class+'_'+category[i]+'.png'
         fig.savefig(maskImageFileName, dpi=dpi, transparent=True)
 
 #    plt.show() 
@@ -221,6 +234,11 @@ maskImageName=frameName+'_mask.jpg'
 img = cv2.imread(annotationImage, 1)
 img=img[:,:,[2,1,0]]
 
+
 # saveAnnotationMaskImage(img, xval_artefact, yval_artefact, category, maskImageName)
 saveAnnotationMasksPerClass(img, xval_artefact, yval_artefact, category, maskImageName)
+
+unique_entries = set(category)
+indices = { value : [ i for i, v in enumerate(category) if v == value ] for value in unique_entries }
+
 
