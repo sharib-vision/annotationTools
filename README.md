@@ -1,6 +1,6 @@
 # annotationTools
 
-[AIDA](https://github.com/alanaberdeen/AIDA) is annotation tool which we have used to achieve ground truth for semantic segmentation. This repo is made to help us convert the acquired json files to their corresponding mask images. 
+[AIDA](https://github.com/alanaberdeen/AIDA) is an annotation tool which we have used to achieve ground truth for semantic segmentation. This repo is made to help us convert the acquired json files to their corresponding mask images. 
 
 
 [1] Convertion of ``bounding boxes for detection`` of AIDA (Json) to txt file (yolo format but unnormalized)
