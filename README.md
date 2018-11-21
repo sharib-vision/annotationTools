@@ -16,3 +16,7 @@
 [4] Evaluation (DICE and Jaccard)
 
     see evaluation/ 
+
+
+
+      Note: we are still testing github-repo for semantic segmentation so the code can be messy
