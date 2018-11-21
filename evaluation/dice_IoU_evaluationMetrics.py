@@ -66,8 +66,8 @@ if __name__ == '__main__':
     #classTypes = ['specularity', 'saturation', 'artefact', 'blur', 'contrast', 'bubbles', 'instrument']
     
 #    testing only
-    file_name_GT='Frame_00002233_mask_Artefact.png'
-    file_name_predicted='../Frame_00002233_mask_artefact_predicted.png'
+    file_name_GT='../masks/Frame_00002233_mask_Artefact.png'
+    file_name_predicted='../masks/Frame_00002233_mask_artefact_predicted.png'
     
     y_true = (cv2.imread(str(file_name_GT), 0) > 0).astype(np.uint8)
  
