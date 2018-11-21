@@ -181,7 +181,8 @@ def saveAnnotationMasksPerClass(img, xval_artefact, yval_artefact, category, mas
     for k in range (len(unique_entries)):
         arrayList_cat.append(len(indices[category[k]]))
     
-    print(arrayList_cat)
+#    print(arrayList_cat)
+    maskImageFileNameList = []
     
     for i in range (len(unique_entries)):
         fig = plt.figure(figsize=figsize)
@@ -206,12 +207,16 @@ def saveAnnotationMasksPerClass(img, xval_artefact, yval_artefact, category, mas
                 print(k[j])
                 plt_before=plt_before+plt.fill(xval_artefact[l][:],yval_artefact[l][:], linewidth=5,color=colorArray[i])
                 j += 1
-        
+       
 #        if annotation outside box then delete it    
         maskImageFileName = maskImageFileName_class+'_'+category[i]+'.png'
         print(maskImageFileName)
         fig.savefig(maskImageFileName, dpi=dpi, transparent=True)
-
+        maskImageFileNameList.append(maskImageFileName)
+        
+    return maskImageFileNameList
+        
+#    fi.write_multipage(image, 'test_multiple.tif')
 #    plt.show() 
     
 useParsing=0
@@ -320,12 +325,40 @@ xval_artefact, yval_artefact= clearArray (xval_artefact, yval_artefact, w, 'heig
     Create annotation masks and save them
 '''
 # saveAnnotationMaskImage(img, xval_artefact, yval_artefact, category, maskImageName)
-saveAnnotationMasksPerClass(img, xval_artefact, yval_artefact, category, maskImageName)
+maskImageFileNameList=saveAnnotationMasksPerClass(img, xval_artefact, yval_artefact, category, maskImageName)
 
+# save annotation masks as binary 7 channel masks? (0, 1, 2, 3, 4, 5, 6)
 
+# save as tiff images
+# testing
+'''
+       1) make an empty array of size [h, w, #classes]
+        2) masks per class type (check before each indexing)
+        3) save array as tif [array]
+'''
+import PIL 
+from PIL import Image
+
+list_file=maskImageFileNameList
+# write ordered maskImageList in txt file
+textfile = open(frameName+'_mask.txt', 'a')
+
+# mask list 
+with PIL.TiffImagePlugin.AppendingTiffWriter(frameName+'_mask.tiff',True) as tf:        
+    for i in range (len(list_file)):
+        tiff_in=list_file[i]
+        im= Image.open(tiff_in).convert('L')
+        im.save(tf)
+        tf.newFrame()
+        textfile.write(tiff_in)
+        textfile.write('\n')
+        
+textfile.close()
+            
 '''
     Experimental codes only
 '''
+
 unique_entries = set(category)
 indices = { value : [ i for i, v in enumerate(category) if v == value ] for value in unique_entries }
 
