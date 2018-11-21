@@ -12,3 +12,7 @@
 [3] Convertion of bounding boxes to csv file
 
     use yolo2csv.py
+    
+[4] Evaluation (DICE and Jaccard)
+
+    see evaluation/ 
