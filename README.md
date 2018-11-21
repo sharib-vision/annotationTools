@@ -1,5 +1,6 @@
 # annotationTools
 
+[AIDA](https://github.com/alanaberdeen/AIDA) is annotation tool which we have used to achieve ground truth for semantic segmentation
 
 [1] Convertion of ``bounding boxes for detection`` of AIDA (Json) to txt file (yolo format but unnormalized)
 
