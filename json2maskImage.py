@@ -5,7 +5,57 @@ Created on Fri Nov 16 17:25:52 2018
 
 @author: shariba
 """
+def check(list1, val): 
+    return(all(x > val for x in list1)) 
+    
+def check_less(list1, val): 
+    return(all(x < val for x in list1)) 
+    
+def clearArray (xval_artefact, yval_artefact, w, s):
+    j2=0
+    if (s =='height'):
+        for i in range (len(xval_artefact)):
+            if (check_less(xval_artefact[i], w) == False ):
+                j2 = list(filter(lambda x: x > w, xval_artefact[i]))
+                for j in range (len(j2)):
+                    ind=xval_artefact[i].index(j2[j])
+                    del xval_artefact[i][ind]
+                    del yval_artefact[i][ind]   
+    else:
+        for i in range (len(yval_artefact)):
+            if (check_less(yval_artefact[i], w) == False):
+                j2 = list(filter(lambda x: x > w, yval_artefact[i]))      
+#        j3 = list(filter(lambda x: x > h, yval_artefact[i]))
+                for j in range (len(j2)):
+                    ind=yval_artefact[i].index(j2[j])
+                    del xval_artefact[i][ind]
+                    del yval_artefact[i][ind]   
+                
+    return xval_artefact, yval_artefact
 
+def clearArray_zeroBound (xval_artefact, yval_artefact, val):
+    for i in range (len(xval_artefact)):
+#        check if its greater than certain value
+        if (check(xval_artefact[i], val) == False or check(yval_artefact[i], val) == False):
+            j2 = list(filter(lambda x: x < val, xval_artefact[i]))
+            for j in range (len(j2)):
+                ind=xval_artefact[i].index(j2[j])
+                del xval_artefact[i][ind]
+                del yval_artefact[i][ind]
+                
+            j3 = list(filter(lambda x: x < val, yval_artefact[i]))
+            for j in range (len(j3)):
+                ind=yval_artefact[i].index(j3[j])
+                del xval_artefact[i][ind]
+                del yval_artefact[i][ind]
+                
+    return xval_artefact, yval_artefact
+
+#            
+#        for j in range (len(j3)):
+#            ind=yval_artefact[i].index(j3[j])
+#            del xval_artefact[i][ind]
+#            del yval_artefact[i][ind] 
 
 def draw_caption(image, boxes):
     import random as rnd
@@ -131,7 +181,7 @@ def saveAnnotationMasksPerClass(img, xval_artefact, yval_artefact, category, mas
     for k in range (len(unique_entries)):
         arrayList_cat.append(len(indices[category[k]]))
     
-#    print(arrayList_cat)
+    print(arrayList_cat)
     
     for i in range (len(unique_entries)):
         fig = plt.figure(figsize=figsize)
@@ -143,13 +193,23 @@ def saveAnnotationMasksPerClass(img, xval_artefact, yval_artefact, category, mas
         j = 0
         plt_before = plt.fill(0,0, linewidth=5,color=colorArray[i])
 #        combine masks belonging to same class
-        while j < arrayList_cat[i]:
+#        while j <= arrayList_cat[i]:
     #        plt.plot(xval_artefact[i][:],yval_artefact[i][:], linewidth=5,color=colorArray[i])
-            plt_before=plt_before+plt.fill(xval_artefact[i+j][:],yval_artefact[i+j][:], linewidth=5,color=colorArray[i])
-            j += 1
+        k = indices.get(category[i])
+        l = k[0]
+        if len(k) == 1:
+            plt.fill(xval_artefact[l][:],yval_artefact[l][:], linewidth=5,color=colorArray[i])
+        else: 
+#            TODO: There was a mistake in Barbara's annotation for 01440.jpg (consisted of empty arrays for last case)
+            while j < len(k):
+                l = k[j]
+                print(k[j])
+                plt_before=plt_before+plt.fill(xval_artefact[l][:],yval_artefact[l][:], linewidth=5,color=colorArray[i])
+                j += 1
         
-
+#        if annotation outside box then delete it    
         maskImageFileName = maskImageFileName_class+'_'+category[i]+'.png'
+        print(maskImageFileName)
         fig.savefig(maskImageFileName, dpi=dpi, transparent=True)
 
 #    plt.show() 
@@ -201,14 +261,18 @@ if __name__=="__main__":
 #        jsonFile='AIDA_annotation-2.json'//data can be deprecated
         jsonFile='AIDA_barbara_2233.json'
         jsonFile='sampleJson/AIDA_annotation-3_barbara_2233.json'
+#        jsonFile='sampleJson/AIDA_annotation_1440.json'
 #        TODO admin
 #        category,  bbox, frameName, data = read_json_file_admin(jsonFile)
         category,  bbox, data, segment = read_json_file(jsonFile)
         frameName='Frame_00002233' 
+#        frameName='01440' 
 
 
 # do for above params
-        
+'''
+    Extract x-, y- indices from json file
+'''        
 xval_artefact=[]
 yval_artefact=[]
 
@@ -224,7 +288,9 @@ for i in range (len(segment)):
     yval_artefact.append(yvals)
 
 
-
+'''
+    Call correponding image and create masks with above array list of indices
+'''
 import cv2 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -234,10 +300,32 @@ maskImageName=frameName+'_mask.jpg'
 img = cv2.imread(annotationImage, 1)
 img=img[:,:,[2,1,0]]
 
+'''
+    Delete empty entries in the array
+    TODO: count no of empty entries 
+'''
+xval_artefact = list(filter(None, xval_artefact))
+yval_artefact = list(filter(None, yval_artefact))
+'''
+    Annotation boundary handling 
+'''
+#zero-val boundary keep only >0 indices
+xval_artefact, yval_artefact= clearArray_zeroBound (xval_artefact, yval_artefact, 0)          
+h, w, ch = img.shape
+# keep only <=h and <=w indices
+xval_artefact, yval_artefact= clearArray (xval_artefact, yval_artefact, h, 'width')  
+xval_artefact, yval_artefact= clearArray (xval_artefact, yval_artefact, w, 'height')       
 
+'''
+    Create annotation masks and save them
+'''
 # saveAnnotationMaskImage(img, xval_artefact, yval_artefact, category, maskImageName)
 saveAnnotationMasksPerClass(img, xval_artefact, yval_artefact, category, maskImageName)
 
+
+'''
+    Experimental codes only
+'''
 unique_entries = set(category)
 indices = { value : [ i for i, v in enumerate(category) if v == value ] for value in unique_entries }
 
