@@ -80,7 +80,7 @@ def read_json_file_admin(jsonFile):
                 bbox.append(result_tuple_to) 
     return category, bbox, frameName, data
 
-useParsing=0
+useParsing=1
 debug = 0
 writeImagewithBox=1
 annotator=['adam', 'barbara']
